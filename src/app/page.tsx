@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface IUser {
   id: number;
@@ -16,14 +16,36 @@ export default function Home() {
     { id: 4, fullName: "Sandra Ozola", profileImage: "4.jpg" },
   ];
   const [theUsers, setTheUsers] = useState<IUser[]>(usersList);
+  const [searchUser, setSeachUser] = useState("");
+
+  useEffect(() => {
+    let tempUsers = [...theUsers];
+    tempUsers = tempUsers.filter((u) =>
+      u.fullName.toLowerCase().includes(searchUser.toLowerCase())
+    );
+    setTheUsers(tempUsers);
+    if (searchUser === "") {
+      setTheUsers(usersList);
+    }
+  }, [searchUser]);
+
   return (
     // MAIN = className="flex min-h-screen flex-col items-center justify-between p-24"
     <main>
       <h1>HELLO WORLD :)</h1>
       <div className="grid grid-cols-2 gap-4">
-        <div>01</div>
+        <div>
+          01
+          <input
+            type="text"
+            value={searchUser}
+            onChange={(event) => setSeachUser(event.target.value)}
+          />
+          <h1>{searchUser}</h1>
+        </div>
         <div>02</div>
         <div>
+          03
           {theUsers.map((oneUser) => {
             return (
               <div key={oneUser.id}>
