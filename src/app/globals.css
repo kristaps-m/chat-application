@@ -31,3 +31,12 @@ body {
     text-wrap: balance;
   }
 }
+
+.clicked {
+  background-color: lightblue;
+  /* Change this to the desired background color */
+}
+
+.hover-pointer {
+  cursor: pointer;
+}

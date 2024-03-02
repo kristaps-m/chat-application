@@ -17,6 +17,8 @@ export default function Home() {
   ];
   const [theUsers, setTheUsers] = useState<IUser[]>(usersList);
   const [searchUser, setSeachUser] = useState("");
+  const [clickedUserByIndex, setClickedUserByIndex] = useState(0);
+  const [clickedUserID, setClickedUserID] = useState(theUsers[0].id);
 
   useEffect(() => {
     let tempUsers = [...theUsers];
@@ -38,18 +40,35 @@ export default function Home() {
           01
           <input
             type="text"
+            placeholder="   Search"
             value={searchUser}
             onChange={(event) => setSeachUser(event.target.value)}
           />
           <h1>{searchUser}</h1>
         </div>
-        <div>02</div>
+        <div>
+          02
+          {/* Search by array index */}
+          {/* {theUsers[clickedUserByIndex].fullName} */}
+          {/* Search by ID */}
+          {theUsers.filter((u) => u.id === clickedUserID)[0].fullName}
+        </div>
         <div>
           03
           {theUsers.map((oneUser) => {
             return (
-              <div key={oneUser.id}>
-                <h1>{oneUser.fullName}</h1>
+              <div
+                key={oneUser.id}
+                className={clickedUserID === oneUser.id ? "clicked" : ""}
+              >
+                <h1
+                  onClick={() => {
+                    setClickedUserID(oneUser.id);
+                  }}
+                  className="hover-pointer"
+                >
+                  {oneUser.fullName}
+                </h1>
               </div>
             );
           })}
