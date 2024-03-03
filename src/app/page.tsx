@@ -38,7 +38,7 @@ export default function Home() {
     {
       id: 5,
       fullName: "Ingrida Vienīgā",
-      profileImage: "5.jpg",
+      profileImage: "",
       theMessages: [],
     },
   ];
@@ -132,27 +132,34 @@ export default function Home() {
             return (
               <div
                 key={oneUser.id}
-                className={clickedUserID === oneUser.id ? "clicked" : ""}
+                className={
+                  clickedUserID === oneUser.id
+                    ? "clicked hover-pointer"
+                    : "hover-pointer"
+                }
+                onClick={() => {
+                  setClickedUserID(oneUser.id);
+                }}
               >
                 <div className="flex flex-row">
-                  <img
-                    src={`/pictures/${oneUser.profileImage}`} // Path to the image
-                    // src={`/pictures/${oneUser.profileImage}`}
-                    // src={require(`./pictures/${oneUser.profileImage}`)}
-                    alt={oneUser.fullName
-                      .split(" ")
-                      .map((x) => x[0].toUpperCase())
-                      .join(".")}
-                    width={50}
-                  />
-                  <h1
-                    onClick={() => {
-                      setClickedUserID(oneUser.id);
-                    }}
-                    className="hover-pointer"
-                  >
-                    {oneUser.fullName}
-                  </h1>
+                  {oneUser.profileImage ? (
+                    <img
+                      src={`/pictures/${oneUser.profileImage}`}
+                      alt={oneUser.fullName
+                        .split(" ")
+                        .map((x) => x[0].toUpperCase())
+                        .join(".")}
+                      className="w-20 h-20 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-20 h-20 rounded-full object-cover bg-red-800 flex items-center justify-center text-white text-4xl">
+                      {oneUser.fullName
+                        .split(" ")
+                        .map((x) => x[0].toUpperCase())
+                        .join(".")}
+                    </div>
+                  )}
+                  <h1 className="text-lg">{oneUser.fullName}</h1>
                 </div>
               </div>
             );
