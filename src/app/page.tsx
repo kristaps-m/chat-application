@@ -90,11 +90,19 @@ export default function Home() {
     if (clickedUserID !== null) {
       if (theUsers.length > 0) {
         try {
-          return theUsers
-            .filter((u) => u.id === clickedUserID)[0]
-            .theMessages.map((m, index) => {
-              return <p key={index}>{m}</p>;
-            });
+          return (
+            <div className="pb-2 pr-4">
+              {theUsers
+                .filter((u) => u.id === clickedUserID)[0]
+                .theMessages.map((m, index) => {
+                  return (
+                    <p key={index} className="bg-green-200 my-2 p-2">
+                      {m}
+                    </p>
+                  );
+                })}
+            </div>
+          );
         } catch (error) {
           return <p></p>;
         }
@@ -110,10 +118,14 @@ export default function Home() {
     // MAIN = className="flex min-h-screen flex-col items-center justify-between p-24"
     <main>
       <h1>HELLO WORLD :)</h1>
-      <div className="grid grid-cols-2 gap-4">
+      <div
+        className="grid grid-cols-2 gap-4"
+        style={{ gridTemplateColumns: "1fr 2fr" }}
+      >
         <div>
           01
           <input
+            className="min-w-full"
             type="text"
             placeholder="   Search"
             value={searchUser}
@@ -167,8 +179,11 @@ export default function Home() {
         </div>
         <div>
           04
-          {returnClickedPersonsMessages()}
+          <div className="min-h-full bg-green-400 flex justify-end items-end">
+            {returnClickedPersonsMessages()}
+          </div>
           <input
+            className="min-w-full"
             type="text"
             placeholder="Write a message..."
             onKeyDown={(event) => {
