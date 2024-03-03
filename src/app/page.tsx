@@ -134,14 +134,26 @@ export default function Home() {
                 key={oneUser.id}
                 className={clickedUserID === oneUser.id ? "clicked" : ""}
               >
-                <h1
-                  onClick={() => {
-                    setClickedUserID(oneUser.id);
-                  }}
-                  className="hover-pointer"
-                >
-                  {oneUser.fullName}
-                </h1>
+                <div className="flex flex-row">
+                  <img
+                    src={`/pictures/${oneUser.profileImage}`} // Path to the image
+                    // src={`/pictures/${oneUser.profileImage}`}
+                    // src={require(`./pictures/${oneUser.profileImage}`)}
+                    alt={oneUser.fullName
+                      .split(" ")
+                      .map((x) => x[0].toUpperCase())
+                      .join(".")}
+                    width={50}
+                  />
+                  <h1
+                    onClick={() => {
+                      setClickedUserID(oneUser.id);
+                    }}
+                    className="hover-pointer"
+                  >
+                    {oneUser.fullName}
+                  </h1>
+                </div>
               </div>
             );
           })}
