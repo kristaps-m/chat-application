@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { generateMockUsers } from "./mockData";
 
 interface IUser {
   id: number;
@@ -10,6 +11,7 @@ interface IUser {
 }
 
 export default function Home() {
+  // users List for testing.
   let usersList = [
     {
       id: 1,
@@ -23,37 +25,23 @@ export default function Home() {
       profileImage: "2.jpg",
       theMessages: ["hello 2", "how?"],
     },
-    {
-      id: 3,
-      fullName: "Baiba Egle",
-      profileImage: "3.jpg",
-      theMessages: ["hello 3", "how?"],
-    },
-    {
-      id: 4,
-      fullName: "Sandra Ozola",
-      profileImage: "4.jpg",
-      theMessages: ["hello 4", "how?"],
-    },
-    {
-      id: 5,
-      fullName: "Ingrida Vienīgā",
-      profileImage: "",
-      theMessages: [],
-    },
   ];
-  const [theUsers, setTheUsers] = useState<IUser[]>(usersList);
+
+  const [theUsers, setTheUsers] = useState<IUser[]>([]);
   const [searchUser, setSeachUser] = useState("");
   const [clickedUserID, setClickedUserID] = useState<number | null>(null);
 
   useEffect(() => {
+    // Fetch mock data when the component mounts
+    const mockUsers = generateMockUsers();
+    setTheUsers(mockUsers);
     let tempUsers = [...theUsers];
     tempUsers = tempUsers.filter((u) =>
       u.fullName.toLowerCase().includes(searchUser.toLowerCase())
     );
     setTheUsers(tempUsers);
     if (searchUser === "") {
-      setTheUsers(usersList);
+      setTheUsers(mockUsers);
     }
   }, [searchUser]);
 
@@ -91,7 +79,7 @@ export default function Home() {
       if (theUsers.length > 0) {
         try {
           return (
-            <div className="pb-2 pr-4">
+            <div className="pb-2 px-4">
               {theUsers
                 .filter((u) => u.id === clickedUserID)[0]
                 .theMessages.map((m, index) => {
@@ -112,6 +100,30 @@ export default function Home() {
     }
 
     return <p></p>;
+  }
+
+  function profilePicuterOrInitials(oneUser: IUser) {
+    if (oneUser.profileImage) {
+      return (
+        <img
+          src={`/pictures/${oneUser.profileImage}`}
+          alt={oneUser.fullName
+            .split(" ")
+            .map((x) => x[0].toUpperCase())
+            .join(".")}
+          className="w-20 h-20 rounded-full object-cover"
+        />
+      );
+    } else {
+      return (
+        <div className="w-20 h-20 rounded-full object-cover bg-red-800 flex items-center justify-center text-white text-4xl">
+          {oneUser.fullName
+            .split(" ")
+            .map((x) => x[0].toUpperCase())
+            .join(".")}
+        </div>
+      );
+    }
   }
 
   return (
@@ -154,23 +166,7 @@ export default function Home() {
                 }}
               >
                 <div className="flex flex-row">
-                  {oneUser.profileImage ? (
-                    <img
-                      src={`/pictures/${oneUser.profileImage}`}
-                      alt={oneUser.fullName
-                        .split(" ")
-                        .map((x) => x[0].toUpperCase())
-                        .join(".")}
-                      className="w-20 h-20 rounded-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-20 h-20 rounded-full object-cover bg-red-800 flex items-center justify-center text-white text-4xl">
-                      {oneUser.fullName
-                        .split(" ")
-                        .map((x) => x[0].toUpperCase())
-                        .join(".")}
-                    </div>
-                  )}
+                  {profilePicuterOrInitials(oneUser)}
                   <h1 className="text-lg">{oneUser.fullName}</h1>
                 </div>
               </div>
