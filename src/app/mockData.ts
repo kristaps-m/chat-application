@@ -1,11 +1,5 @@
+import IUser from "@/models/IUser";
 import Mock from "mockjs";
-
-export interface IUser {
-  id: number;
-  fullName: string;
-  profileImage: string;
-  theMessages: string[];
-}
 
 export const generateMockUsers = (): IUser[] => {
   const mockData = Mock.mock({

@@ -2,16 +2,11 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { generateMockUsers } from "./mockData";
-
-interface IUser {
-  id: number;
-  fullName: string;
-  profileImage: string;
-  theMessages: string[];
-}
+import chatApplication from "../../styles/chat-application.module.scss";
+import IUser from "@/models/IUser";
 
 export default function Home() {
-  // users List for testing.
+  // simple users List for testing.
   let usersList = [
     {
       id: 1,
@@ -84,9 +79,9 @@ export default function Home() {
                 .filter((u) => u.id === clickedUserID)[0]
                 .theMessages.map((m, index) => {
                   return (
-                    <p key={index} className="bg-green-200 rounded-md my-2 p-2">
-                      {m}
-                    </p>
+                    <div key={index} className="text-right">
+                      <p className={chatApplication.personsMessages}>{m}</p>
+                    </div>
                   );
                 })}
             </div>
@@ -103,10 +98,9 @@ export default function Home() {
   }
 
   function profilePicuterOrInitials(oneUser: IUser) {
-    console.log(oneUser.profileImage);
     if (oneUser.profileImage.includes("0")) {
       return (
-        <div className="w-20 h-20 rounded-full object-cover bg-red-800 flex items-center justify-center text-white text-4xl">
+        <div className={chatApplication.userWithoutPicture}>
           {oneUser.fullName
             .split(" ")
             .map((x) => x[0].toUpperCase())
@@ -115,22 +109,22 @@ export default function Home() {
       );
     } else if (oneUser.profileImage) {
       return (
-        <img
+        <Image
           src={`/pictures/${oneUser.profileImage}`}
+          width={20}
+          height={20}
           alt={oneUser.fullName
             .split(" ")
             .map((x) => x[0].toUpperCase())
             .join(".")}
-          className="w-20 h-20 rounded-full object-cover flex items-center justify-center text-4xl"
+          className={chatApplication.userPicture}
         />
       );
     }
   }
 
   return (
-    // MAIN = className="flex min-h-screen flex-col items-center justify-between p-24"
     <main>
-      <h1>HELLO WORLD :)</h1>
       <div
         className="grid grid-cols-2 gap-4"
         style={{ gridTemplateColumns: "1fr 2fr" }}
@@ -167,7 +161,7 @@ export default function Home() {
                 }}
               >
                 {/* border for testing */}
-                <div className="flex flex-row ml-4 items-center text-center border">
+                <div className={chatApplication.userBox}>
                   {profilePicuterOrInitials(oneUser)}
                   <h1 className="text-lg">{oneUser.fullName}</h1>
                 </div>
@@ -177,7 +171,9 @@ export default function Home() {
         </div>
         <div>
           04
-          <div className="min-h-full bg-green-400 flex justify-end items-end">
+          {/* min-h-full bg-green-400 flex justify-end items-end */}
+          {/* {chatApplication.clickedPersonsMessages} */}
+          <div className={chatApplication.clickedPersonsMessages}>
             {returnClickedPersonsMessages()}
           </div>
           <input
