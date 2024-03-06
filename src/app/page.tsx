@@ -84,7 +84,7 @@ export default function Home() {
                 .filter((u) => u.id === clickedUserID)[0]
                 .theMessages.map((m, index) => {
                   return (
-                    <p key={index} className="bg-green-200 my-2 p-2">
+                    <p key={index} className="bg-green-200 rounded-md my-2 p-2">
                       {m}
                     </p>
                   );
@@ -103,18 +103,8 @@ export default function Home() {
   }
 
   function profilePicuterOrInitials(oneUser: IUser) {
-    if (oneUser.profileImage) {
-      return (
-        <img
-          src={`/pictures/${oneUser.profileImage}`}
-          alt={oneUser.fullName
-            .split(" ")
-            .map((x) => x[0].toUpperCase())
-            .join(".")}
-          className="w-20 h-20 rounded-full object-cover"
-        />
-      );
-    } else {
+    console.log(oneUser.profileImage);
+    if (oneUser.profileImage.includes("0")) {
       return (
         <div className="w-20 h-20 rounded-full object-cover bg-red-800 flex items-center justify-center text-white text-4xl">
           {oneUser.fullName
@@ -122,6 +112,17 @@ export default function Home() {
             .map((x) => x[0].toUpperCase())
             .join(".")}
         </div>
+      );
+    } else if (oneUser.profileImage) {
+      return (
+        <img
+          src={`/pictures/${oneUser.profileImage}`}
+          alt={oneUser.fullName
+            .split(" ")
+            .map((x) => x[0].toUpperCase())
+            .join(".")}
+          className="w-20 h-20 rounded-full object-cover flex items-center justify-center text-4xl"
+        />
       );
     }
   }
@@ -134,7 +135,7 @@ export default function Home() {
         className="grid grid-cols-2 gap-4"
         style={{ gridTemplateColumns: "1fr 2fr" }}
       >
-        <div>
+        <div className="ml-4">
           01
           <input
             className="min-w-full"
@@ -165,7 +166,8 @@ export default function Home() {
                   setClickedUserID(oneUser.id);
                 }}
               >
-                <div className="flex flex-row">
+                {/* border for testing */}
+                <div className="flex flex-row ml-4 items-center text-center border">
                   {profilePicuterOrInitials(oneUser)}
                   <h1 className="text-lg">{oneUser.fullName}</h1>
                 </div>

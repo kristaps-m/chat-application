@@ -13,7 +13,7 @@ export const generateMockUsers = (): IUser[] => {
       {
         "id|+1": 1,
         fullName: "@name",
-        "profileImage|+1": "@integer(1, 20).jpg",
+        "profileImage|+1": "@integer(0, 15).jpg",
         "theMessages|2-5": ["@sentence", "@sentence", "@sentence"],
       },
     ],
