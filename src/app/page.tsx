@@ -78,33 +78,33 @@ export default observer(function Home() {
     return "";
   }
 
-  // function returnClickedPersonsMessages() {
-  //   if (clickedUserID !== null) {
-  //     if (theUsers.length > 0) {
-  //       try {
-  //         return (
-  //           <div className="pb-2 px-4">
-  //             {theUsers
-  //               .filter((u) => u.id === clickedUserID)[0]
-  //               .theMessages.map((m, index) => {
-  //                 return (
-  //                   <div key={index} className="text-right">
-  //                     <p className={chatApplication.personsMessages}>{m}</p>
-  //                   </div>
-  //                 );
-  //               })}
-  //           </div>
-  //         );
-  //       } catch (error) {
-  //         return <p></p>;
-  //       }
-  //     } else {
-  //       return <p></p>;
-  //     }
-  //   }
+  function returnClickedPersonsMessages() {
+    if (clickedUserID !== null) {
+      if (usersStore.users.length > 0) {
+        try {
+          return (
+            <div className="pb-2 px-4">
+              {usersStore.users
+                .filter((u: IUser) => u.id === clickedUserID)[0]
+                .theMessages.map((m: string, index: number) => {
+                  return (
+                    <div key={index} className="text-right">
+                      <p className={chatApplication.personsMessages}>{m}</p>
+                    </div>
+                  );
+                })}
+            </div>
+          );
+        } catch (error) {
+          return <p></p>;
+        }
+      } else {
+        return <p></p>;
+      }
+    }
 
-  //   return <p></p>;
-  // }
+    return <p></p>;
+  }
 
   function profilePicuterOrInitials(oneUser: IUser) {
     if (oneUser.profileImage.includes("0")) {
@@ -184,7 +184,7 @@ export default observer(function Home() {
           {/* min-h-full bg-green-400 flex justify-end items-end */}
           {/* {chatApplication.clickedPersonsMessages} */}
           <div className={chatApplication.clickedPersonsMessages}>
-            {/* {returnClickedPersonsMessages()} */}
+            {returnClickedPersonsMessages()}
           </div>
           <input
             className="min-w-full"
