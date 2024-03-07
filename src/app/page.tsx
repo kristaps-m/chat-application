@@ -31,19 +31,21 @@ export default observer(function Home() {
 
   useEffect(() => {
     usersStore.fetchUsers();
-    console.log(usersStore.users);
+    // console.log(usersStore.users);
     // // Fetch mock data when the component mounts
     // const mockUsers = generateMockUsers();
     // setTheUsers(mockUsers);
-    // let tempUsers = [...theUsers];
+    // let tempUsers = [...usersStore.users];
     // tempUsers = tempUsers.filter((u) =>
     //   u.fullName.toLowerCase().includes(searchUser.toLowerCase())
     // );
     // setTheUsers(tempUsers);
+    // usersStore.setUsers(tempUsers);
+    usersStore.searchUser(searchUser);
     // if (searchUser === "") {
     //   setTheUsers(mockUsers);
     // }
-  }, [usersStore]);
+  }, [searchUser]);
 
   // function addTextToMessagesWhenEnterPressed(stringPressEnter: string) {
   //   let tempUsers = [...theUsers];
@@ -56,23 +58,25 @@ export default observer(function Home() {
   //   setTheUsers(tempUsers);
   // }
 
-  // function returnClickedUsersFullname() {
-  //   if (clickedUserID) {
-  //     if (theUsers.length > 0) {
-  //       let fullName;
-  //       try {
-  //         fullName = theUsers.filter((u) => u.id === clickedUserID)[0].fullName;
-  //         return fullName;
-  //       } catch (error) {
-  //         return "";
-  //       }
-  //     } else {
-  //       return "";
-  //     }
-  //   }
+  function returnClickedUsersFullname() {
+    if (clickedUserID) {
+      if (usersStore.users.length > 0) {
+        let fullName;
+        try {
+          fullName = usersStore.users.filter(
+            (u: IUser) => u.id === clickedUserID
+          )[0].fullName;
+          return fullName;
+        } catch (error) {
+          return "";
+        }
+      } else {
+        return "";
+      }
+    }
 
-  //   return "";
-  // }
+    return "";
+  }
 
   // function returnClickedPersonsMessages() {
   //   if (clickedUserID !== null) {
@@ -148,7 +152,7 @@ export default observer(function Home() {
         <div>
           02
           {/* Search by ID */}
-          {/* {returnClickedUsersFullname()} */}
+          {returnClickedUsersFullname()}
         </div>
         <div>
           03
