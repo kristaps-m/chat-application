@@ -33,16 +33,6 @@ export default observer(function Home() {
     usersStore.searchUser(searchUser);
   }, [searchUser, usersStore]);
 
-  // function returnClickedUsersFullname() {
-  //   if (clickedUserID && usersStore.users.length > 0) {
-  //     const clickedUser = usersStore.users.find(
-  //       (user: IUser) => user.id === clickedUserID
-  //     );
-  //     return clickedUser ? clickedUser.fullName : "";
-  //   }
-  //   return "";
-  // }
-
   function returnClickedPersonsMessages() {
     if (clickedUserID !== null) {
       if (usersStore.users.length > 0) {
@@ -117,7 +107,6 @@ export default observer(function Home() {
         <div>
           02
           {/* Search by ID */}
-          {/* {returnClickedUsersFullname()} */}
           {usersStore.returnClickedUsersFullname(clickedUserID)}
         </div>
         <div>
@@ -147,8 +136,6 @@ export default observer(function Home() {
         </div>
         <div>
           04
-          {/* min-h-full bg-green-400 flex justify-end items-end */}
-          {/* {chatApplication.clickedPersonsMessages} */}
           <div className={chatApplication.clickedPersonsMessages}>
             {returnClickedPersonsMessages()}
           </div>
@@ -161,7 +148,6 @@ export default observer(function Home() {
                 const inputElement = event.target as HTMLInputElement;
                 const inputValue = inputElement.value;
                 // Call your function with the input value
-                // addTextToMessagesWhenEnterPressed(inputValue); // OLD function
                 usersStore.addTextToMessagesWhenEnterPressed(
                   inputValue,
                   clickedUserID

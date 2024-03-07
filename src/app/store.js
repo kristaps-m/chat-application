@@ -19,7 +19,6 @@ export const UsersStore = types.model("UsersStore", {
     store.users = newUsers
   },
   async fetchUsers(){
-    // console.log(mockUsers)
     store.setUsers(mockUsers)
   },
   addTextToMessagesWhenEnterPressed(stringPressEnter, clickedUserID) {
