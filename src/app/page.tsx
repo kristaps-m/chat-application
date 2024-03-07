@@ -2,7 +2,6 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
-// import { generateMockUsers } from "./mockData";
 import chatApplication from "../../styles/chat-application.module.scss";
 import IUser from "@/models/IUser";
 import { useUsers } from "./store";
@@ -31,52 +30,18 @@ export default observer(function Home() {
 
   useEffect(() => {
     usersStore.fetchUsers();
-    // console.log(usersStore.users);
-    // // Fetch mock data when the component mounts
-    // const mockUsers = generateMockUsers();
-    // setTheUsers(mockUsers);
-    // let tempUsers = [...usersStore.users];
-    // tempUsers = tempUsers.filter((u) =>
-    //   u.fullName.toLowerCase().includes(searchUser.toLowerCase())
-    // );
-    // setTheUsers(tempUsers);
-    // usersStore.setUsers(tempUsers);
     usersStore.searchUser(searchUser);
-    // if (searchUser === "") {
-    //   setTheUsers(mockUsers);
-    // }
-  }, [searchUser]);
+  }, [searchUser, usersStore]);
 
-  // function addTextToMessagesWhenEnterPressed(stringPressEnter: string) {
-  //   let tempUsers = [...theUsers];
-  //   for (let index = 0; index < tempUsers.length; index++) {
-  //     if (tempUsers[index].id === clickedUserID) {
-  //       tempUsers[index].theMessages.push(stringPressEnter);
-  //     }
+  // function returnClickedUsersFullname() {
+  //   if (clickedUserID && usersStore.users.length > 0) {
+  //     const clickedUser = usersStore.users.find(
+  //       (user: IUser) => user.id === clickedUserID
+  //     );
+  //     return clickedUser ? clickedUser.fullName : "";
   //   }
-
-  //   setTheUsers(tempUsers);
+  //   return "";
   // }
-
-  function returnClickedUsersFullname() {
-    if (clickedUserID) {
-      if (usersStore.users.length > 0) {
-        let fullName;
-        try {
-          fullName = usersStore.users.filter(
-            (u: IUser) => u.id === clickedUserID
-          )[0].fullName;
-          return fullName;
-        } catch (error) {
-          return "";
-        }
-      } else {
-        return "";
-      }
-    }
-
-    return "";
-  }
 
   function returnClickedPersonsMessages() {
     if (clickedUserID !== null) {
@@ -152,12 +117,13 @@ export default observer(function Home() {
         <div>
           02
           {/* Search by ID */}
-          {returnClickedUsersFullname()}
+          {/* {returnClickedUsersFullname()} */}
+          {usersStore.returnClickedUsersFullname(clickedUserID)}
         </div>
         <div>
           03
           {/* theUsers.map().... */}
-          {usersStore.users.map((oneUser: any) => {
+          {usersStore.users.map((oneUser: IUser) => {
             return (
               <div
                 key={oneUser.id}
@@ -195,7 +161,11 @@ export default observer(function Home() {
                 const inputElement = event.target as HTMLInputElement;
                 const inputValue = inputElement.value;
                 // Call your function with the input value
-                // addTextToMessagesWhenEnterPressed(inputValue);
+                // addTextToMessagesWhenEnterPressed(inputValue); // OLD function
+                usersStore.addTextToMessagesWhenEnterPressed(
+                  inputValue,
+                  clickedUserID
+                );
                 // Clear the input field
                 inputElement.value = "";
               }

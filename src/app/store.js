@@ -21,6 +21,26 @@ export const UsersStore = types.model("UsersStore", {
   async fetchUsers(){
     // console.log(mockUsers)
     store.setUsers(mockUsers)
+  },
+  addTextToMessagesWhenEnterPressed(stringPressEnter, clickedUserID) {
+    store.users = store.users.map(user => {
+      if (user.id === clickedUserID) {
+        return {
+          ...user,
+          theMessages: [...user.theMessages, stringPressEnter]
+        };
+      }
+      return user;
+    });
+  },
+  returnClickedUsersFullname(clickedUserID) {
+    if (clickedUserID && store.users.length > 0) {
+      const clickedUser = store.users.find(
+        (user) => user.id === clickedUserID
+      );
+      return clickedUser ? clickedUser.fullName : "";
+    }
+    return "";
   }
 })).actions((store) => ({
   searchUser(searchUser) {
