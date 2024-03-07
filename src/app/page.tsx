@@ -1,11 +1,12 @@
 "use client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { generateMockUsers } from "./mockData";
+import { observer } from "mobx-react-lite";
 import chatApplication from "../../styles/chat-application.module.scss";
 import IUser from "@/models/IUser";
+import { useUsers } from "./store";
 
-export default function Home() {
+export default observer(function Home() {
   // simple users List for testing.
   let usersList = [
     {
@@ -22,62 +23,25 @@ export default function Home() {
     },
   ];
 
-  const [theUsers, setTheUsers] = useState<IUser[]>([]);
+  // const [theUsers, setTheUsers] = useState<IUser[]>([]);
+  const usersStore = useUsers();
   const [searchUser, setSeachUser] = useState("");
   const [clickedUserID, setClickedUserID] = useState<number | null>(null);
 
   useEffect(() => {
-    // Fetch mock data when the component mounts
-    const mockUsers = generateMockUsers();
-    setTheUsers(mockUsers);
-    let tempUsers = [...theUsers];
-    tempUsers = tempUsers.filter((u) =>
-      u.fullName.toLowerCase().includes(searchUser.toLowerCase())
-    );
-    setTheUsers(tempUsers);
-    if (searchUser === "") {
-      setTheUsers(mockUsers);
-    }
-  }, [searchUser]);
-
-  function addTextToMessagesWhenEnterPressed(stringPressEnter: string) {
-    let tempUsers = [...theUsers];
-    for (let index = 0; index < tempUsers.length; index++) {
-      if (tempUsers[index].id === clickedUserID) {
-        tempUsers[index].theMessages.push(stringPressEnter);
-      }
-    }
-
-    setTheUsers(tempUsers);
-  }
-
-  function returnClickedUsersFullname() {
-    if (clickedUserID) {
-      if (theUsers.length > 0) {
-        let fullName;
-        try {
-          fullName = theUsers.filter((u) => u.id === clickedUserID)[0].fullName;
-          return fullName;
-        } catch (error) {
-          return "";
-        }
-      } else {
-        return "";
-      }
-    }
-
-    return "";
-  }
+    usersStore.fetchUsers();
+    usersStore.searchUser(searchUser);
+  }, [searchUser, usersStore]);
 
   function returnClickedPersonsMessages() {
     if (clickedUserID !== null) {
-      if (theUsers.length > 0) {
+      if (usersStore.users.length > 0) {
         try {
           return (
             <div className="pb-2 px-4">
-              {theUsers
-                .filter((u) => u.id === clickedUserID)[0]
-                .theMessages.map((m, index) => {
+              {usersStore.users
+                .filter((u: IUser) => u.id === clickedUserID)[0]
+                .theMessages.map((m: string, index: number) => {
                   return (
                     <div key={index} className="text-right">
                       <p className={chatApplication.personsMessages}>{m}</p>
@@ -143,11 +107,12 @@ export default function Home() {
         <div>
           02
           {/* Search by ID */}
-          {returnClickedUsersFullname()}
+          {usersStore.returnClickedUsersFullname(clickedUserID)}
         </div>
         <div>
           03
-          {theUsers.map((oneUser) => {
+          {/* theUsers.map().... */}
+          {usersStore.users.map((oneUser: IUser) => {
             return (
               <div
                 key={oneUser.id}
@@ -171,8 +136,6 @@ export default function Home() {
         </div>
         <div>
           04
-          {/* min-h-full bg-green-400 flex justify-end items-end */}
-          {/* {chatApplication.clickedPersonsMessages} */}
           <div className={chatApplication.clickedPersonsMessages}>
             {returnClickedPersonsMessages()}
           </div>
@@ -185,7 +148,10 @@ export default function Home() {
                 const inputElement = event.target as HTMLInputElement;
                 const inputValue = inputElement.value;
                 // Call your function with the input value
-                addTextToMessagesWhenEnterPressed(inputValue);
+                usersStore.addTextToMessagesWhenEnterPressed(
+                  inputValue,
+                  clickedUserID
+                );
                 // Clear the input field
                 inputElement.value = "";
               }
@@ -195,4 +161,4 @@ export default function Home() {
       </div>
     </main>
   );
-}
+});
