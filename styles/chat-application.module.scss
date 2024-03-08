@@ -49,10 +49,43 @@
 }
 
 // min-h-full bg-green-400 flex justify-end items-end
-.clickedPersonsMessages{
+// .clickedPersonsMessages{
+//   display: flex;
+//   justify-content: flex-end;
+//   align-items: flex-end;
+//   min-height: 100%;
+//   background-color: $green-400;
+// }
+
+.clickedPersonsMessages {
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
   min-height: 100%;
-  background-color: $green-400;
+  background-image: url('/pictures/background.jpg');
+  /* Specify the path to your background image */
+  background-size: cover;
+  /* Cover the entire div with the background image */
+  background-repeat: no-repeat;
+  /* Prevent the background image from repeating */
+}
+
+// .userSearchBox {
+//   margin-left: 1rem;
+//   display: flex;
+//   margin-left: 1rem;
+//   flex-direction: row;
+//   align-items: center;
+//   text-align: center;
+// }
+
+.userSearchBox {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.inputContainer {
+  flex-grow: 1;
+  /* Input field takes up remaining space */
 }

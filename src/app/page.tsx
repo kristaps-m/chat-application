@@ -93,24 +93,71 @@ export default observer(function Home() {
         className="grid grid-cols-2 gap-4"
         style={{ gridTemplateColumns: "1fr 2fr" }}
       >
-        <div className="ml-4">
-          01
-          <input
-            className="min-w-full"
-            type="text"
-            placeholder="   Search"
-            value={searchUser}
-            onChange={(event) => setSeachUser(event.target.value)}
-          />
-          <h1>{searchUser}</h1>
+        <div className={chatApplication.userSearchBox}>
+          {/* Button with image */}
+          <button>
+            <Image
+              src="/pictures/dropDown.png"
+              width={61}
+              height={45}
+              alt="dropDown"
+            />
+          </button>
+
+          {/* Input field */}
+          <div className={chatApplication.inputContainer}>
+            <input
+              className="h-12 rounded min-w-full"
+              type="text"
+              placeholder="Search"
+              value={searchUser}
+              onChange={(event) => setSeachUser(event.target.value)}
+            />
+          </div>
         </div>
-        <div>
-          02
+        <div className={chatApplication.userSearchBox}>
+          {/* 02 Clicked Users Fullname */}
           {/* Search by ID */}
-          {usersStore.returnClickedUsersFullname(clickedUserID)}
+          <div className={chatApplication.inputContainer}>
+            <h1 className="min-w-full font-bold">
+              {usersStore.returnClickedUsersFullname(clickedUserID)}
+            </h1>
+          </div>
+          <button>
+            <Image
+              src="/pictures/phone.png"
+              width={61}
+              height={45}
+              alt="dropDown"
+            />
+          </button>
+          <button>
+            <Image
+              src="/pictures/searchIcon.png"
+              width={61}
+              height={45}
+              alt="dropDown"
+            />
+          </button>
+          <button>
+            <Image
+              src="/pictures/iconUknown.png"
+              width={61}
+              height={45}
+              alt="dropDown"
+            />
+          </button>
+          <button>
+            <Image
+              src="/pictures/threeDots.png"
+              width={61}
+              height={45}
+              alt="dropDown"
+            />
+          </button>
         </div>
         <div>
-          03
+          {/* 03 List of Users */}
           {/* theUsers.map().... */}
           {usersStore.users.map((oneUser: IUser) => {
             return (
@@ -135,28 +182,58 @@ export default observer(function Home() {
           })}
         </div>
         <div>
-          04
+          {/* 04 Clicked User messages / Enter message field*/}
           <div className={chatApplication.clickedPersonsMessages}>
             {returnClickedPersonsMessages()}
           </div>
-          <input
-            className="min-w-full"
-            type="text"
-            placeholder="Write a message..."
-            onKeyDown={(event) => {
-              if (event.key === "Enter") {
-                const inputElement = event.target as HTMLInputElement;
-                const inputValue = inputElement.value;
-                // Call your function with the input value
-                usersStore.addTextToMessagesWhenEnterPressed(
-                  inputValue,
-                  clickedUserID
-                );
-                // Clear the input field
-                inputElement.value = "";
-              }
-            }}
-          />
+          <div className={chatApplication.userSearchBox}>
+            <button>
+              <Image
+                src="/pictures/atachFile.png"
+                width={61}
+                height={45}
+                alt="dropDown"
+              />
+            </button>
+            <div className={chatApplication.inputContainer}>
+              <h1 className="min-w-full">
+                <input
+                  className="h-12 rounded min-w-full"
+                  type="text"
+                  placeholder="Write a message..."
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      const inputElement = event.target as HTMLInputElement;
+                      const inputValue = inputElement.value;
+                      // Call your function with the input value
+                      usersStore.addTextToMessagesWhenEnterPressed(
+                        inputValue,
+                        clickedUserID
+                      );
+                      // Clear the input field
+                      inputElement.value = "";
+                    }
+                  }}
+                />
+              </h1>
+            </div>
+            <button>
+              <Image
+                src="/pictures/faces.png"
+                width={61}
+                height={45}
+                alt="dropDown"
+              />
+            </button>
+            <button>
+              <Image
+                src="/pictures/microphone.png"
+                width={61}
+                height={45}
+                alt="dropDown"
+              />
+            </button>
+          </div>
         </div>
       </div>
     </main>
