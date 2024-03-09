@@ -1,9 +1,8 @@
 import {types} from "mobx-state-tree";
 import { generateMockUsers } from "./mockData";
 
-let mockUsers;
 // Fetch mock data when the component mounts
-mockUsers = generateMockUsers()
+const  mockUsers = generateMockUsers();
 
 export const UserModel = types.model("UserModel", {
   id: types.number,
@@ -40,7 +39,7 @@ export const UsersStore = types.model("UsersStore", {
       return clickedUser ? clickedUser.fullName : "";
     }
     return "";
-  }
+  },
 })).actions((store) => ({
   searchUser(searchUser) {
     store.users = store.users.filter((u) =>

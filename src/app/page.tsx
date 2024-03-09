@@ -22,8 +22,6 @@ export default observer(function Home() {
       theMessages: ["hello 2", "how?"],
     },
   ];
-
-  // const [theUsers, setTheUsers] = useState<IUser[]>([]);
   const usersStore = useUsers();
   const [searchUser, setSeachUser] = useState("");
   const [clickedUserID, setClickedUserID] = useState<number | null>(null);
@@ -103,7 +101,6 @@ export default observer(function Home() {
               alt="dropDown"
             />
           </button>
-
           {/* Input field */}
           <div className={chatApplication.inputContainer}>
             <input
@@ -116,12 +113,15 @@ export default observer(function Home() {
           </div>
         </div>
         <div className={chatApplication.userSearchBox}>
-          {/* 02 Clicked Users Fullname */}
-          {/* Search by ID */}
+          {/* 02 Clicked Users Fullname and 4 buttons*/}
           <div className={chatApplication.inputContainer}>
-            <h1 className="min-w-full font-bold">
-              {usersStore.returnClickedUsersFullname(clickedUserID)}
-            </h1>
+            <div>
+              <h1 className="min-w-full font-bold">
+                {/* Search by ID */}
+                {usersStore.returnClickedUsersFullname(clickedUserID)}
+              </h1>
+              <p>{clickedUserID && "24.12.2023 12:31"}</p>
+            </div>
           </div>
           <button>
             <Image
@@ -158,7 +158,6 @@ export default observer(function Home() {
         </div>
         <div>
           {/* 03 List of Users */}
-          {/* theUsers.map().... */}
           {usersStore.users.map((oneUser: IUser) => {
             return (
               <div
@@ -172,10 +171,17 @@ export default observer(function Home() {
                   setClickedUserID(oneUser.id);
                 }}
               >
-                {/* border for testing */}
                 <div className={chatApplication.userBox}>
                   {profilePicuterOrInitials(oneUser)}
-                  <h1 className="text-lg">{oneUser.fullName}</h1>
+                  <div>
+                    <h1 className="text-lg">{oneUser.fullName}</h1>
+                    <p>
+                      You:...{" "}
+                      {oneUser.theMessages[
+                        oneUser.theMessages.length - 1
+                      ].slice(-12)}
+                    </p>
+                  </div>
                 </div>
               </div>
             );
