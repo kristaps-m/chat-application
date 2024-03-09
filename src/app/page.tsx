@@ -1,113 +1,247 @@
+"use client";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { observer } from "mobx-react-lite";
+import chatApplication from "../../styles/chat-application.module.scss";
+import IUser from "@/models/IUser";
+import { useUsers } from "./store";
 
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+export default observer(function Home() {
+  // simple users List for testing.
+  let usersList = [
+    {
+      id: 1,
+      fullName: "Janis Berzins",
+      profileImage: "1.jpg",
+      theMessages: ["hello 1", "how?"],
+    },
+    {
+      id: 2,
+      fullName: "Karlis Lielais",
+      profileImage: "2.jpg",
+      theMessages: ["hello 2", "how?"],
+    },
+  ];
+  const usersStore = useUsers();
+  const [searchUser, setSeachUser] = useState("");
+  const [clickedUserID, setClickedUserID] = useState<number | null>(null);
+
+  useEffect(() => {
+    usersStore.fetchUsers();
+    usersStore.searchUser(searchUser);
+  }, [searchUser, usersStore]);
+
+  function returnClickedPersonsMessages() {
+    if (clickedUserID !== null) {
+      if (usersStore.users.length > 0) {
+        try {
+          return (
+            <div className="pb-2 px-4">
+              {usersStore.users
+                .filter((u: IUser) => u.id === clickedUserID)[0]
+                .theMessages.map((m: string, index: number) => {
+                  return (
+                    <div key={index} className="text-right">
+                      <p className={chatApplication.personsMessages}>{m}</p>
+                    </div>
+                  );
+                })}
+            </div>
+          );
+        } catch (error) {
+          return <p></p>;
+        }
+      } else {
+        return <p></p>;
+      }
+    }
+
+    return <p></p>;
+  }
+
+  function profilePicuterOrInitials(oneUser: IUser) {
+    if (oneUser.profileImage.includes("0")) {
+      return (
+        <div className={chatApplication.userWithoutPicture}>
+          {oneUser.fullName
+            .split(" ")
+            .map((x) => x[0].toUpperCase())
+            .join(".")}
         </div>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
+      );
+    } else if (oneUser.profileImage) {
+      return (
         <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+          src={`/pictures/${oneUser.profileImage}`}
+          width={20}
+          height={20}
+          alt={oneUser.fullName
+            .split(" ")
+            .map((x) => x[0].toUpperCase())
+            .join(".")}
+          className={chatApplication.userPicture}
         />
-      </div>
+      );
+    }
+  }
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+  return (
+    <main>
+      <div
+        className="grid grid-cols-2 gap-4"
+        style={{ gridTemplateColumns: "1fr 2fr" }}
+      >
+        <div className={chatApplication.userSearchBox}>
+          {/* Button with image */}
+          <button>
+            <Image
+              src="/pictures/dropDown.png"
+              width={61}
+              height={45}
+              alt="dropDown"
+            />
+          </button>
+          {/* Input field */}
+          <div className={chatApplication.inputContainer}>
+            <input
+              className="h-12 rounded min-w-full"
+              type="text"
+              placeholder="Search"
+              value={searchUser}
+              onChange={(event) => setSeachUser(event.target.value)}
+            />
+          </div>
+        </div>
+        <div className={chatApplication.userSearchBox}>
+          {/* 02 Clicked Users Fullname and 4 buttons*/}
+          <div className={chatApplication.inputContainer}>
+            <div>
+              <h1 className="min-w-full font-bold">
+                {/* Search by ID */}
+                {usersStore.returnClickedUsersFullname(clickedUserID)}
+              </h1>
+              <p>{clickedUserID && "24.12.2023 12:31"}</p>
+            </div>
+          </div>
+          <button>
+            <Image
+              src="/pictures/phone.png"
+              width={61}
+              height={45}
+              alt="dropDown"
+            />
+          </button>
+          <button>
+            <Image
+              src="/pictures/searchIcon.png"
+              width={61}
+              height={45}
+              alt="dropDown"
+            />
+          </button>
+          <button>
+            <Image
+              src="/pictures/iconUknown.png"
+              width={61}
+              height={45}
+              alt="dropDown"
+            />
+          </button>
+          <button>
+            <Image
+              src="/pictures/threeDots.png"
+              width={61}
+              height={45}
+              alt="dropDown"
+            />
+          </button>
+        </div>
+        <div>
+          {/* 03 List of Users */}
+          {usersStore.users.map((oneUser: IUser) => {
+            return (
+              <div
+                key={oneUser.id}
+                className={
+                  clickedUserID === oneUser.id
+                    ? "clicked hover-pointer"
+                    : "hover-pointer"
+                }
+                onClick={() => {
+                  setClickedUserID(oneUser.id);
+                }}
+              >
+                <div className={chatApplication.userBox}>
+                  {profilePicuterOrInitials(oneUser)}
+                  <div>
+                    <h1 className="text-lg">{oneUser.fullName}</h1>
+                    <p>
+                      You:...{" "}
+                      {oneUser.theMessages[
+                        oneUser.theMessages.length - 1
+                      ].slice(-12)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div>
+          {/* 04 Clicked User messages / Enter message field*/}
+          <div className={chatApplication.clickedPersonsMessages}>
+            {returnClickedPersonsMessages()}
+          </div>
+          <div className={chatApplication.userSearchBox}>
+            <button>
+              <Image
+                src="/pictures/atachFile.png"
+                width={61}
+                height={45}
+                alt="dropDown"
+              />
+            </button>
+            <div className={chatApplication.inputContainer}>
+              <h1 className="min-w-full">
+                <input
+                  className="h-12 rounded min-w-full"
+                  type="text"
+                  placeholder="Write a message..."
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      const inputElement = event.target as HTMLInputElement;
+                      const inputValue = inputElement.value;
+                      // Call your function with the input value
+                      usersStore.addTextToMessagesWhenEnterPressed(
+                        inputValue,
+                        clickedUserID
+                      );
+                      // Clear the input field
+                      inputElement.value = "";
+                    }
+                  }}
+                />
+              </h1>
+            </div>
+            <button>
+              <Image
+                src="/pictures/faces.png"
+                width={61}
+                height={45}
+                alt="dropDown"
+              />
+            </button>
+            <button>
+              <Image
+                src="/pictures/microphone.png"
+                width={61}
+                height={45}
+                alt="dropDown"
+              />
+            </button>
+          </div>
+        </div>
       </div>
     </main>
   );
-}
+});

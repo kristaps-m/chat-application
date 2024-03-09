@@ -31,3 +31,11 @@ body {
     text-wrap: balance;
   }
 }
+
+.clicked {
+  background-color: lightblue;
+}
+
+.hover-pointer {
+  cursor: pointer;
+}
